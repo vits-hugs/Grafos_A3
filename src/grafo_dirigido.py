@@ -4,6 +4,7 @@ from grafo import Grafo
 class Grafo_dirigido(Grafo):
     def __init__(self, vertices, vertices_array, arestas) -> None:
         super().__init__(vertices,vertices_array,arestas)
+        self.fluxo = [0]*self.qtdArestas()
 
     def vizinhos_plus(self, v):
         vizinhanca = []
@@ -38,6 +39,13 @@ class Grafo_dirigido(Grafo):
             aresta_transpostas.append(Aresta(aresta.fim,aresta.inicio,aresta.peso))
         return aresta_transpostas
 
+    def get_index_aresta(self,u,v):
+        index = 0
+        for aresta in self.arestas:
+            if aresta.inicio == u and aresta.fim == v:
+                return index
+            index +=1
+        return -1
 
 class Aresta:
     def __init__(self, inicio, fim, peso) -> None:

@@ -28,18 +28,25 @@ def busca_largura_ed_Karp(grafo: Grafo_dirigido):
                     return p 
                 Q.append(vertice)
             
+    return -1
 
 def Edmonds_Karp(grafo:Grafo_dirigido):
-    p = busca_largura_ed_Karp(grafo)
     print(grafo.fluxo)
+    p = 0
     while p != -1:
-        pass
+        p = busca_largura_ed_Karp(grafo)
         #cf(p) = min(cf(u,v):(u,v) e p)
-        for aresta in p:
+        arestas = get_arestas(grafo,p)
+        minimo = min_arestas(grafo,arestas)
+        for aresta_index in arestas:
+            aresta = grafo.arestas[aresta_index]
             if grafo.haAresta(aresta.inicio,aresta.fim):
-                pass
+                grafo.fluxo[aresta_index] + minimo
             else:
-                pass
+                grafo.fluxo[aresta_index] - minimo#bagulho da capacidade
+                
+        #    else:
+        #        pass
 
 
 def verify_aresta(grafo:Grafo_dirigido,u,v):
@@ -48,12 +55,28 @@ def verify_aresta(grafo:Grafo_dirigido,u,v):
         return 0
     return grafo.arestas[ind].peso - grafo.fluxo[ind]
 
+def get_arestas(grafo:Grafo_dirigido,p):
+    arestas = []
+    for x in range(1,len(p)):
+        ind = grafo.get_index_aresta(p[x-1],p[x])
+        arestas.append(ind)    
+    return arestas
+
+def min_arestas(grafo: Grafo_dirigido, arestas_i):#pelo custo
+    menor_a = grafo.arestas[arestas_i[0]]
+    menor = grafo.arestas[arestas_i[0]].peso
+    for i in arestas_i:
+        aresta = grafo.arestas[i]
+        if aresta.peso < menor:
+            menor = aresta.peso
+            menor_a = aresta 
+    return menor
 g_dirigido = GrafoFactory().create_dirigido("dirigido.net")
 
 
-busca_largura_ed_Karp(g_dirigido)
 
 for x in g_dirigido.arestas:
     print(x)
 
 
+Edmonds_Karp(g_dirigido)
